@@ -8,6 +8,13 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var session = require('express-session')
+var SessionStore = require('connect-mongo')(session);
+var store = new SessionStore({
+  url: "mongodb://localhost/session",
+  interval: 120000
+});
+
 var app = express();
 
 // view engine setup
@@ -21,9 +28,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.methodOverride());
+app.use(session({
+  secret : 'fens.me',
+  store : store,
+  cookie: {maxAge: 900000},
+  resave: true,
+  saveUninitialized: true,
+  name: 'JSESSIONID'
+}));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/user/account/login?', require('./routes/login'));
+
+
+app.use(function(req, res, next){
+  res.locals.user = req.session.user;
+  next();
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
