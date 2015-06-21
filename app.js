@@ -40,7 +40,7 @@ app.use(session({
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/user/account/login?', require('./routes/login'));
+app.use('/account', require('./routes/account'));
 
 
 app.use(function(req, res, next){
