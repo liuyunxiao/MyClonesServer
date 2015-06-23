@@ -15,6 +15,51 @@ var store = new SessionStore({
   interval: 120000
 });
 
+//var mongoose = require('mongoose');
+//mongoose.connect("mongodb://localhost/myclones");
+//
+//var SchemaAccount = new mongoose.Schema({
+//  account: String,
+//  password: String,
+//  salt: String,
+//  hash: String
+//});
+//
+//var Account = mongoose.model('account', SchemaAccount);
+//var newAccount = new Account({Î
+//  account:"jone",
+//  password:"123",
+//  salt:"fjldsjl",
+//  hash:"fjldsjl"
+//}).save(function(err, account){
+//  if(err) throw err;
+//
+//});
+
+//var DBMgr = require('./DBMgr');
+//console.log(DBMgr);
+//console.log(DBMgr.Account);
+
+//var DBMgr = require('./DBMgr');
+//var dbMgr_ = new DBMgr;
+//
+//dbMgr_.Account.findOne({
+//  account: "jone"
+//}, function(err, account){
+//  if(account){}
+//  else
+//  {
+//    var Account = dbMgr.account;
+//    var newAccount = new Account({
+//      account: "jone",
+//      salt: "jfjf",
+//      hash: "fjldjsl"
+//    }).save(function(err, addAccount){
+//          if(err) throw err;
+//        })
+//  }
+//});
+
 var app = express();
 
 // view engine setup
@@ -26,7 +71,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('fens.me'));
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(express.methodOverride());
 app.use(session({
@@ -44,7 +89,8 @@ app.use('/account', require('./routes/account'));
 
 
 app.use(function(req, res, next){
-  res.locals.user = req.session.user;
+  //res.locals.user = req.session.user;
+  console.log("function>>>>>>>>>>");
   next();
 });
 

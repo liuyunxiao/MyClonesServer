@@ -17,6 +17,7 @@
     "express-session": "*",
     "session-mongoose": "*",
     "connect-mongo": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "pomelo": "*"
   }
 }

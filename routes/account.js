@@ -3,29 +3,51 @@
  */
 var express = require('express');
 var router = express.Router();
+var DBAccount = require('../DB/dbaccount');
 
 /* GET home page. */
 router.post('/login', function(req, res, next) {
-    //res.render('index', { title: 'Express' });
-
     //req.session.islogin = 'success';
-    //req.locals.islogin = req.session.islogin;
+    //res.locals.islogin = req.session.islogin;
 
-    //res.locals.ff = 'jfldjslj';
-    //console.log(req);
-    //var st = req.body.mphone;
-    //res.locals.resultCode = 0;
-    //res.locals.
-
-    var data = {
+    var retData = {
         resultCode: 0,
+        resultMsg: ""
+    };
+    var saveData = {
+        account: req.body.account,
+        password: req.body.password,
+        salt: "fjldsjfl",
+        hash: "fjdjk"
     };
 
-    var str = JSON.stringify(data);
-    console.log(str);
-    res.send(str);
+    DBAccount.countByAccount(req.body.account, function(err, count){
+        if(count == 0)
+        {
+            DBAccount.save(saveData, function(err){
+                if(err)
+                {
+                    retData.resultCode = 1;
+                    retData.resultMsg = "保存数据库出错";
+                    res.send(JSON.stringify(retData));
+                }
+                else
+                {
+                    res.send(JSON.stringify(retData));
+                }
+            });
+        }
+        else
+        {
+            retData.resultCode = 1;
+            retData.resultMsg = "账号已存在";
+            res.send(JSON.stringify(retData));
+        }
+    });
 
-    //console.log(res);
+
+
+    console.log(req.session);
 });
 
 router.post('/register', function(req, res, next) {
