@@ -9,15 +9,7 @@ var hash = require('../pass').hash;
 var dbCurd = require('../DB/dbcurd');
 var co = require('co');
 
-
-
-/* GET home page. */
 router.post('/login', function(req, res, next) {
-    var retData = {
-        resultCode: 0,
-        resultMsg: ""
-    };
-
     co(function* (){
         var data = yield dbCurd.findOne('db_account', {account:req.body.account});
         var checkLogin = function(data) {
@@ -44,45 +36,44 @@ router.post('/login', function(req, res, next) {
             })
         }
         return yield checkLogin(data);
-    }).then(function(data)
-    {
-        retData.resultCode = 0;
-        res.send(JSON.stringify(retData));
-        if(data)
-        {
-            console.log(data);
-        }
-    }, function(error)
-    {
-        if(error)
-        {
-            retData.resultCode = 1;
-            retData.resultMsg = error.message;
-            res.send(JSON.stringify(retData));
-            console.log(error.message);
-        }
+    }).then(function(data) {
+        res.json({resultCode:0});
+        console.log(data);
+        console.log(retData);
+    }, function(err) {
+        res.json({resultCode:'1', resultMsg:err.message});
+        console.log(err.message);
+        console.log(retData);
     });
 });
 
-router.post('/checkaccount', function(req, res, next) {
+router.post('/checkAccount', function(req, res, next) {
+    co(function* (){
+        var accountData = yield dbCurd.findOne('db_account', {account:req.body.account});
+        var checkAccount = function(account) {
+            return new Promise(function (resolve, reject) {
+                if (account) reject(new Error('账号已存在'));
+                else {
+                    resolve(account);
+                }
 
+            })
+        }
+        return yield checkAccount(accountData);
+    }).then(function(data) {
+        res.json({resultCode:0});
+        console.log(data);
+        console.log(retData);
+    }, function(err) {
+        res.json({resultCode:'1', resultMsg:err.message});
+        console.log(err.message);
+        console.log(retData);
+    });
 });
 
-
-
 router.post('/register', function(req, res, next) {
-    var account = req.body.account;
-    var password = req.body.password;
-
-    var retData = {
-        resultCode: 0,
-        resultMsg: ""
-    };
-
-    if(account == null ) {
-        retData.resultCode = 1;
-        retData.resultMsg = "账号不能为空";
-        res.send(JSON.stringify(retData));
+    if(!req.body.account || req.body.account == undefined) {
+        res.json({resultCode:'1', resultMsg:'账号不能为空'});
         return;
     }
 
@@ -110,24 +101,16 @@ router.post('/register', function(req, res, next) {
 
             })
         }
-
-        var saveHashData =  yield checkRegister(accountData, saveData);
+        var saveHashData = yield checkRegister(accountData, saveData);
         return yield dbCurd.insert('db_account', saveHashData);
     }).then(function(data) {
-        retData.resultCode = 0;
-        res.send(JSON.stringify(retData));
-        if(data)
-        {
-            console.log(data);
-        }
-    }, function(error) {
-        if(error)
-        {
-            retData.resultCode = 1;
-            retData.resultMsg = error.message;
-            res.send(JSON.stringify(retData));
-            console.log(error.message);
-        }
+        res.json({resultCode:0});
+        console.log(data);
+        console.log(retData);
+    }, function(err) {
+        res.json({resultCode:'1', resultMsg:err.message});
+        console.log(err.message);
+        console.log(retData);
     });
 });
 

@@ -15,32 +15,6 @@ var store = new SessionStore({
   interval: 120000
 });
 
-var fs = require('fs');
-
-function readFile(filename, encoding){
-  return new Promise(function(resolve, reject){
-    fs.readFile(filename, encoding, function(err, res){
-      if(err)
-        return reject(err);
-      resolve(res);
-    });
-  });
-}
-
-//readJSON的Promise化
-function readJSON(filename, encoding){
-  return readFile(filename, encoding).then(JSON.parse);
-}
-
-var co = require('co');
-
-
-co(function* (){
-  var filename = yield readFile('hello.txt', 'utf-8');
-  return yield readFile(filename, 'utf-8');
-  //return JSON.parse(json).message;
-}).then(console.log, console.error);
-
 var app = express();
 
 // view engine setup
