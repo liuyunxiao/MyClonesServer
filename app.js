@@ -15,50 +15,31 @@ var store = new SessionStore({
   interval: 120000
 });
 
-//var mongoose = require('mongoose');
-//mongoose.connect("mongodb://localhost/myclones");
-//
-//var SchemaAccount = new mongoose.Schema({
-//  account: String,
-//  password: String,
-//  salt: String,
-//  hash: String
-//});
-//
-//var Account = mongoose.model('account', SchemaAccount);
-//var newAccount = new Account({Î
-//  account:"jone",
-//  password:"123",
-//  salt:"fjldsjl",
-//  hash:"fjldsjl"
-//}).save(function(err, account){
-//  if(err) throw err;
-//
-//});
+var fs = require('fs');
 
-//var DBMgr = require('./DBMgr');
-//console.log(DBMgr);
-//console.log(DBMgr.Account);
+function readFile(filename, encoding){
+  return new Promise(function(resolve, reject){
+    fs.readFile(filename, encoding, function(err, res){
+      if(err)
+        return reject(err);
+      resolve(res);
+    });
+  });
+}
 
-//var DBMgr = require('./DBMgr');
-//var dbMgr_ = new DBMgr;
-//
-//dbMgr_.Account.findOne({
-//  account: "jone"
-//}, function(err, account){
-//  if(account){}
-//  else
-//  {
-//    var Account = dbMgr.account;
-//    var newAccount = new Account({
-//      account: "jone",
-//      salt: "jfjf",
-//      hash: "fjldjsl"
-//    }).save(function(err, addAccount){
-//          if(err) throw err;
-//        })
-//  }
-//});
+//readJSON的Promise化
+function readJSON(filename, encoding){
+  return readFile(filename, encoding).then(JSON.parse);
+}
+
+var co = require('co');
+
+
+co(function* (){
+  var filename = yield readFile('hello.txt', 'utf-8');
+  return yield readFile(filename, 'utf-8');
+  //return JSON.parse(json).message;
+}).then(console.log, console.error);
 
 var app = express();
 
@@ -86,6 +67,15 @@ app.use(session({
 app.use('/', routes);
 app.use('/users', users);
 app.use('/account', require('./routes/account'));
+
+var dbCurd = require('./DB/dbcurd');
+var saveData = {
+  account: 'qqqa77',
+  password: '22222'//,
+  //salt: 'fdee',
+  //hash: 'ssss'
+};
+
 
 
 app.use(function(req, res, next){

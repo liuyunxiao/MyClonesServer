@@ -18,6 +18,9 @@
     "session-mongoose": "*",
     "connect-mongo": "*",
     "mongoose": "*",
-    "pomelo": "*"
+    "pomelo": "*",
+    "mongoose-validatefilter": "*",
+    "q": "*",
+    "co": "*"
   }
 }

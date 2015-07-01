@@ -2,15 +2,29 @@
  * Created by lyx on 15/6/23.
  */
 var mongodbMgr = require('./mongodbMgr');
+var mongooseValidateFilter = require('mongoose-validatefilter');
+var validate = new mongooseValidateFilter.validate();
+var filter = new mongooseValidateFilter.filter();
+
+validate.add('salt',{
+    required: true,
+    msg: 'salt不能为空'
+});
 
 var Schema = mongodbMgr.mongoose.Schema;
 
 var SchemaAccount = new mongodbMgr.mongoose.Schema({
-  account: String,
+  account: {type:String, index:true, unique:true},
   password: String,
-  salt: String,
+  salt: {type:String, require:true},
   hash: String
 });
+
+SchemaAccount.pre('save',function(next){
+    next();
+});
+
+mongooseValidateFilter.validateFilter(SchemaAccount, validate, filter);
 
 var Account = mongodbMgr.mongoose.model('account', SchemaAccount);
 
@@ -23,15 +37,9 @@ AccountDAO.prototype.save = function(obj, callback) {
 };
 
 AccountDAO.prototype.findByAccount = function(name, callback) {
-    Account.find({account:name}, function(err, obj){
+    Account.findOne({account:name}, function(err, obj){
         callback(err, obj);
-    });
+    }).exec();
 };
 
-AccountDAO.prototype.countByAccount = function(name, callback){
-    Account.count({account: name}, function(err, count)
-    {
-        callback(err, count);
-    });
-};
 module.exports = new AccountDAO();

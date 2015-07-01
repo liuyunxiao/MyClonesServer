@@ -1,0 +1,64 @@
+// make sure every value is equal to "something"
+function validator (val) {
+  return val == 'something';
+}
+new Schema({ name: { type: String, validate: validator }});
+ 
+// with a custom error message
+ 
+var custom = [validator, 'Uh oh, {PATH} does not equal "something".']
+new Schema({ name: { type: String, validate: custom }});
+ 
+// adding many validators at a time
+ 
+var many = [
+    { validator: validator, msg: 'uh oh' }
+  , { validator: anotherValidator, msg: 'failed' }
+]
+new Schema({ name: { type: String, validate: many }});
+ 
+// or utilizing SchemaType methods directly:
+ 
+var schema = new Schema({ name: 'string' });
+schema.path('name').validate(validator, 'validation of `{PATH}` failed with value `{VALUE}`');
+
+
+
+
+
+
+
+dbAccount.findByAccount(req.body.account, function(err, account)
+    {
+        if(err)
+        {
+            retData.resultCode = 1;
+            retData.resultMsg = "账号不存在，请注册！";
+            res.send(JSON.stringify(retData));
+        }
+        else
+        {
+            hash(req.body.password, account.salt, function(err1, hash)
+            {
+                if(err1)
+                {
+                    retData.resultCode = 1;
+                    retData.resultMsg = "异常";
+                    res.send(JSON.stringify(retData));
+                }
+                else
+                {
+                    if(hash == account.hash)
+                    {
+                        res.send(JSON.stringify(retData));
+                    }
+                    else
+                    {
+                        retData.resultCode = 1;
+                        retData.resultMsg = "账号或密码错误";
+                        res.send(JSON.stringify(retData));
+                    }
+                }
+            });
+        }
+    });
