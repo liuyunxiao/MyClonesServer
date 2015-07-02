@@ -21,6 +21,7 @@
     "pomelo": "*",
     "mongoose-validatefilter": "*",
     "q": "*",
-    "co": "*"
+    "co": "*",
+    "apn": "*"
   }
 }
