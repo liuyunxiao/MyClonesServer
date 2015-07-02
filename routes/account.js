@@ -3,8 +3,6 @@
  */
 var express = require('express');
 var router = express.Router();
-var dbAccount = require('../DB/dbaccount');
-var dbUser = require('../DB/dbuser');
 var hash = require('../pass').hash;
 var dbCurd = require('../DB/dbcurd');
 var co = require('co');
@@ -54,6 +52,10 @@ router.post('/login', function(req, res, next) {
             cardId: data.cardId,
             phone: data.phone
         };
+        var sessionData ={
+            userId:data._id
+        };
+        req.session.userData = sessionData;
         res.json(retData);
         console.log(data);
         console.log(retData);
@@ -125,13 +127,13 @@ router.post('/register', function(req, res, next) {
         };
         var dbUser = yield dbCurd.insert('db_user', saveUserData);
         //var retData = {
-        //    headPic: 'test.jpg',
-        //    nickName: 'haha',
-        //    sex: 1,
-        //    age: 30,
-        //    name: '老王',
-        //    cardId: '3242342342342',
-        //    phone: '1385722938'
+        //    headPic: 'test2.jpg',
+        //    nickName: '星星',
+        //    sex: 0,
+        //    age: 20,
+        //    name: 'J联赛',
+        //    cardId: '42432432423',
+        //    phone: '13211123'
         //};
         //yield dbCurd.update('db_user', {_id:dbUser._id}, retData);
         return yield dbCurd.update('db_account', {_id:dbAccount._id}, {userId: dbUser._id});
