@@ -42,6 +42,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/account', require('./routes/account'));
 app.use('/dynamic', require('./routes/dynamic'));
+app.use('/self', require('./routes/self'));
 
 var dbCurd = require('./DB/dbcurd');
 var saveData = {

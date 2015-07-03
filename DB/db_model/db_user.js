@@ -13,7 +13,8 @@ var SchemaUser = new mongodbMgr.mongoose.Schema({
     age: Number,
     name: String,
     cardId: String,
-    phone: String
+    phone: String,
+    token: String
 });
 
 module.exports  = mongodbMgr.mongoose.model('db_user', SchemaUser);

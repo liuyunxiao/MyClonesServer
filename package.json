@@ -22,6 +22,8 @@
     "mongoose-validatefilter": "*",
     "q": "*",
     "co": "*",
-    "apn": "*"
+    "apn": "*",
+    "formidable": "*",
+    "node-uuid": "*"
   }
 }
