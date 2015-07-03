@@ -36,8 +36,10 @@ router.post('/changeHeadPic', function(req, res, next) {
                     else{
                         var splitArray = new Array();
                         splitArray = files.file.path.split('/');
-
-                        resolve(splitArray[splitArray.length - 1]);
+                        if(splitArray.length == 0)
+                            reject(new Error('图片解析错误，请重新上传'));
+                        else
+                            resolve(splitArray[splitArray.length - 1]);
                     }
                 })
             });
