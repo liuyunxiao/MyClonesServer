@@ -53,7 +53,6 @@ router.post('/changeHeadPic', function(req, res, next) {
     }, function(err) {
         res.json({resultCode:'1', resultMsg:err.message});
     });
-
 });
 
 module.exports = router;

@@ -24,6 +24,7 @@
     "co": "*",
     "apn": "*",
     "formidable": "*",
-    "node-uuid": "*"
+    "node-uuid": "*",
+    "apn": "*"
   }
 }

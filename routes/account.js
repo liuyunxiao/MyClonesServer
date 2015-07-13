@@ -40,7 +40,9 @@ router.post('/login', function(req, res, next) {
                     resolve(user);
             });
         }
-        return yield checkUser(dbUser);
+
+        yield checkUser(dbUser);
+        return dbUser;
     }).then(function(data) {
         var retData = {
             resultCode: 0,

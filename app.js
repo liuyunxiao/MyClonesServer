@@ -15,6 +15,20 @@ var store = new SessionStore({
   interval: 120000
 });
 
+var apn = require('apn');
+var token = '6fe7fa78a48c7af78bdb65a839402ef1b943121b79a2cdde24d52278227f9a76'; //长度为64的设备Token
+var options = { "gateway": "gateway.sandbox.push.apple.com" },
+    apnConnection = new apn.Connection(options),
+    device = new apn.Device(token),
+    note = new apn.Notification();
+
+note.expiry = Math.floor(Date.now() / 1000) + 60;
+note.badge = 3;
+note.alert = "动漫驿站 \n点击查看更新的1篇文章";
+note.payload = {'messageFrom': 'Caroline'};
+
+apnConnection.pushNotification(note, device);
+
 var app = express();
 
 // view engine setup
