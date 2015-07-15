@@ -27,7 +27,7 @@ note.badge = 3;
 note.alert = "动漫驿站 \n点击查看更新的1篇文章";
 note.payload = {'messageFrom': 'Caroline'};
 
-apnConnection.pushNotification(note, device);
+//apnConnection.pushNotification(note, device);
 
 var app = express();
 

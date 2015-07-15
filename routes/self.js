@@ -9,7 +9,7 @@ var co = require('co');
 var formidable = require('formidable');
 var server_config = require('../server_config');
 
-//按类型获得动态
+//修改头像
 router.post('/changeHeadPic', function(req, res, next) {
     co(function* (){
         var dbUser = yield dbCurd.findOne('db_user', {_id:req.session.userData.userId});
@@ -48,6 +48,27 @@ router.post('/changeHeadPic', function(req, res, next) {
         var picName = yield upLoadPic();
         yield dbCurd.update('db_user', {_id:dbUser._id}, {headPic: picName});
         return picName;
+    }).then(function(data) {
+        res.json({resultCode:'0',headPic:data});
+    }, function(err) {
+        res.json({resultCode:'1', resultMsg:err.message});
+    });
+});
+
+//实名认证
+router.post('/auth', function(req, res, next) {
+    co(function* (){
+        var dbUser = yield dbCurd.findOne('db_user', {_id:req.session.userData.userId});
+        var checkUser = function(user){
+            return new Promise(function(resolve, reject) {
+                if(!user)
+                    reject(new Error('用户不存在'));
+                else
+                    resolve(user);
+            });
+        }
+        checkUser(dbUser);
+        return yield dbCurd.update('db_user', {_id:dbUser._id}, {name:req.body.name, cardId:req.body.cardId, sex:req.body.sex });
     }).then(function(data) {
         res.json({resultCode:'0',headPic:data});
     }, function(err) {
