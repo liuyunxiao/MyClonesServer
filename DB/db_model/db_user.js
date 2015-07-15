@@ -14,7 +14,9 @@ var SchemaUser = new mongodbMgr.mongoose.Schema({
     name: String,
     cardId: String,
     phone: String,
-    token: String
+    token: String,
+    signature: String,
+    district: String
 });
 
 module.exports  = mongodbMgr.mongoose.model('db_user', SchemaUser);

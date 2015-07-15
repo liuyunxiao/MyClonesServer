@@ -42,23 +42,28 @@ router.post('/login', function(req, res, next) {
         }
 
         yield checkUser(dbUser);
-        return dbUser;
-    }).then(function(data) {
+
         var retData = {
             resultCode: 0,
-            headPic: data.headPic,
-            nickName: data.nickName,
-            sex: data.sex,
-            age: data.age,
-            name: data.name,
-            cardId: data.cardId,
-            phone: data.phone
+            userId: dbUser._id,
+            headPic: dbUser.headPic,
+            nickName: dbUser.nickName,
+            sex: dbUser.sex,
+            age: dbUser.age,
+            name: dbUser.name,
+            cardId: dbUser.cardId,
+            phone: dbUser.phone,
+            account: dbAccount.account,
+            password: dbAccount.password
         };
         var sessionData ={
-            userId:data._id
+            userId:dbUser._id
         };
         req.session.userData = sessionData;
-        res.json(retData);
+        return retData;
+    }).then(function(data) {
+
+        res.json(data);
         console.log(data);
         console.log(retData);
     }, function(err) {
